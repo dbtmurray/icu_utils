@@ -2,6 +2,8 @@ require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
 module ICU
   describe Federation do
+    let(:total) { 179 }
+
     context "#find using codes" do
       it "should find a federation given a valid code" do
         fed = Federation.find('IRL')
@@ -84,6 +86,14 @@ module ICU
       end
     end
 
+    context "#find from common code errors" do
+      it "should find IRL from ICU" do
+        Federation.find('ICU').code.should == 'IRL'
+        Federation.find('SPA').code.should == 'ESP'
+        Federation.find('WAL').code.should == 'WLS'
+      end
+    end
+
     context "#find with alternative inputs" do
       it "should behave robustly with completely invalid inputs" do
         Federation.find().should be_nil
@@ -115,13 +125,9 @@ module ICU
     end
 
     context "#menu" do
-      before(:all) do
-        @total = 174
-      end
-
       it "should return array of name-code pairs in order of name by default" do
         menu = Federation.menu
-        menu.should have(@total).items
+        menu.should have(total).items
         names = menu.map{|m| m.first}.join(',')
         codes = menu.map{|m| m.last}.join(',')
         names.index('Afghanistan').should == 0
@@ -132,7 +138,7 @@ module ICU
 
       it "should be configuarble to order the list by codes" do
         menu = Federation.menu(:order => "code")
-        menu.should have(@total).items
+        menu.should have(total).items
         names = menu.map{|m| m.first}.join(',')
         codes = menu.map{|m| m.last}.join(',')
         names.index('Afghanistan').should == 0
@@ -143,7 +149,7 @@ module ICU
 
       it "should be configuarble to have a selected country at the top" do
         menu = Federation.menu(:top => 'IRL')
-        menu.should have(@total).items
+        menu.should have(total).items
         names = menu.map{|m| m.first}.join(',')
         codes = menu.map{|m| m.last}.join(',')
         names.index('Ireland,Afghanistan').should == 0
@@ -154,7 +160,7 @@ module ICU
 
       it "should be configuarble to have 'None' entry at the top" do
         menu = Federation.menu(:none => 'None')
-        menu.should have(@total + 1).items
+        menu.should have(total + 1).items
         names = menu.map{|m| m.first}.join(',')
         codes = menu.map{|m| m.last}.join(',')
         names.index('None,Afghanistan').should == 0
@@ -163,7 +169,7 @@ module ICU
 
       it "should be able to handle multiple configuarations" do
         menu = Federation.menu(:top => 'IRL', :order => 'code', :none => 'None')
-        menu.should have(@total + 1).items
+        menu.should have(total + 1).items
         names = menu.map{|m| m.first}.join(',')
         codes = menu.map{|m| m.last}.join(',')
         names.index('None,Ireland,Afghanistan').should == 0
@@ -174,13 +180,9 @@ module ICU
     end
 
     context "#codes" do
-      before(:all) do
-        @total = 174
-      end
-
       it "should return array of codes ordered alphabetically" do
         codes = Federation.codes
-        codes.should have(@total).items
+        codes.should have(total).items
         all = codes.join(',')
         all.index('AFG').should == 0
         all.index('INA,IND,IRI,IRL,IRQ,ISL,ISR,ISV,ITA,IVB').should_not be_nil

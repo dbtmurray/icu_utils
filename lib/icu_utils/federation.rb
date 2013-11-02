@@ -70,7 +70,10 @@ module ICU
       return nil if str.length < 3
       compile
       str = str.strip.squeeze(' ').downcase
-      return @@codes[str] if str.length == 3
+      if str.length == 3
+        str = correct_common_errors(str)
+        return @@codes[str]
+      end
       return @@names[str] if @@names[str]
       matches = Array.new
       @@names.each_key do |name|
@@ -123,6 +126,17 @@ module ICU
         end
       end
     end
+    
+    def self.correct_common_errors(str)
+      case str
+      when "icu" then "irl"
+      when "rom" then "rou"
+      when "sao" then "stp"
+      when "spa" then "esp"
+      when "wal" then "wls"
+      else str
+      end
+    end
 
     # The data structures compiled.
     @@objects, @@codes, @@names = nil, nil, nil
@@ -148,7 +162,7 @@ module ICU
       ['BAR', 'Barbados'],
       ['BLR', 'Belarus'],
       ['BEL', 'Belgium'],
-      ['BIZ', 'Belize'],
+      ['BLZ', 'Belize'],
       ['BEN', 'Benin Republic'],
       ['BER', 'Bermuda'],
       ['BHU', 'Bhutan'],
@@ -159,7 +173,6 @@ module ICU
       ['IVB', 'British Virgin Islands'],
       ['BRU', 'Brunei Darussalam'],
       ['BUL', 'Bulgaria'],
-      ['BUR', 'Burkina Faso'],
       ['BDI', 'Burundi'],
       ['CAM', 'Cambodia'],
       ['CMR', 'Cameroon'],
@@ -174,6 +187,7 @@ module ICU
       ['CUB', 'Cuba'],
       ['CYP', 'Cyprus'],
       ['CZE', 'Czech Republic'],
+      ['CGO', 'Congo-Kinshasa'],
       ['DEN', 'Denmark'],
       ['DJI', 'Djibouti'],
       ['DOM', 'Dominican Republic'],
@@ -193,6 +207,7 @@ module ICU
       ['GER', 'Germany'],
       ['GHA', 'Ghana'],
       ['GRE', 'Greece'],
+      ['GUM', 'Guam'],
       ['GUA', 'Guatemala'],
       ['GCI', 'Guernsey'],
       ['GUY', 'Guyana'],
@@ -217,8 +232,10 @@ module ICU
       ['KEN', 'Kenya'],
       ['KUW', 'Kuwait'],
       ['KGZ', 'Kyrgyzstan'],
+      ['LAO', 'Laos'],
       ['LAT', 'Latvia'],
       ['LIB', 'Lebanon'],
+      ['LSO', 'Lesotho'],
       ['LBA', 'Libya'],
       ['LIE', 'Liechtenstein'],
       ['LTU', 'Lithuania'],
@@ -274,6 +291,7 @@ module ICU
       ['SIN', 'Singapore'],
       ['SVK', 'Slovakia'],
       ['SLO', 'Slovenia'],
+      ['SOL', 'Solomon Islands'],
       ['SOM', 'Somalia'],
       ['RSA', 'South Africa'],
       ['KOR', 'South Korea'],
@@ -287,6 +305,7 @@ module ICU
       ['TJK', 'Tajikistan'],
       ['TAN', 'Tanzania'],
       ['THA', 'Thailand'],
+      ['TOG', 'Togo'],
       ['TRI', 'Trinidad and Tobago'],
       ['TUN', 'Tunisia'],
       ['TUR', 'Turkey'],
