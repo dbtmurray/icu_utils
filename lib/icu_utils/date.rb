@@ -49,19 +49,14 @@ module ICU
       valid
     end
 
-    # after: must be after %{restriction}
-    # before: must be before %{restriction}
-    # invalid: invalid
-    # invalid_date: invalid date
-    # on_or_after: must be on or after %{restriction}
-    # on_or_before: must be on or before %{restriction}
-
     private
 
     def to_date(thing)
       thing = thing.call if thing.respond_to?(:call)
       if thing.is_a?(Date)
         thing.dup
+      elsif thing.to_s.downcase == "today"
+        thing = ::Date.today
       else
         thing = ::Date.parse(thing.to_s)
       end

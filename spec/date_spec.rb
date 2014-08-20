@@ -208,5 +208,37 @@ module ICU
         expect(d.reasons[1]).to eq restriction: penny.to_s
       end
     end
+
+    context "symbol constraints" do
+      it "before" do
+        d = ICU::Date.new(penny, before: :today)
+        expect(d).to be_valid
+        expect(d.date).to eq penny
+        expect(d.reasons).to be_empty
+      end
+
+      it "after" do
+        d = ICU::Date.new(yesterday, after: "TODAY")
+        expect(d).to_not be_valid
+        expect(d.date).to eq yesterday
+        expect(d.reasons[0]).to eq "errors.messages.after"
+        expect(d.reasons[1]).to eq restriction: today.to_s
+      end
+
+      it "on or before" do
+        d = ICU::Date.new(today, on_or_before: "Today")
+        expect(d).to be_valid
+        expect(d.date).to eq today
+        expect(d.reasons).to be_empty
+      end
+
+      it "on or after" do
+        d = ICU::Date.new(mark, on_or_after: "today")
+        expect(d).to_not be_valid
+        expect(d.date).to eq mark
+        expect(d.reasons[0]).to eq "errors.messages.on_or_after"
+        expect(d.reasons[1]).to eq restriction: today.to_s
+      end
+    end
   end
 end
