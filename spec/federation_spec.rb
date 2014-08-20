@@ -7,185 +7,185 @@ module ICU
     context "#find using codes" do
       it "should find a federation given a valid code" do
         fed = Federation.find('IRL')
-        fed.code.should == 'IRL'
-        fed.name.should == 'Ireland'
+        expect(fed.code).to eq('IRL')
+        expect(fed.name).to eq('Ireland')
       end
 
       it "should find a federation from code case insensitively" do
         fed = Federation.find('rUs')
-        fed.code.should == 'RUS'
-        fed.name.should == 'Russia'
+        expect(fed.code).to eq('RUS')
+        expect(fed.name).to eq('Russia')
       end
 
       it "should find a federation despite irrelevant whitespace" do
         fed = Federation.find('  mex    ')
-        fed.code.should == 'MEX'
-        fed.name.should == 'Mexico'
+        expect(fed.code).to eq('MEX')
+        expect(fed.name).to eq('Mexico')
       end
 
       it "should return nil for an invalid code" do
-        Federation.find('XYZ').should be_nil
+        expect(Federation.find('XYZ')).to be_nil
       end
     end
 
     context "#find using names" do
       it "should find a federation given a valid name" do
         fed = Federation.find('England')
-        fed.code.should == 'ENG'
-        fed.name.should == 'England'
+        expect(fed.code).to eq('ENG')
+        expect(fed.name).to eq('England')
       end
 
       it "should find a federation from name case insensitively" do
         fed = Federation.find('franCE')
-        fed.code.should == 'FRA'
-        fed.name.should == 'France'
+        expect(fed.code).to eq('FRA')
+        expect(fed.name).to eq('France')
       end
 
       it "should not be fooled by irrelevant whitespace" do
         fed = Federation.find(' united  states  of  america ')
-        fed.code.should == 'USA'
-        fed.name.should == 'United States of America'
+        expect(fed.code).to eq('USA')
+        expect(fed.name).to eq('United States of America')
       end
 
       it "should return nil for an invalid name" do
-        Federation.find('Mordor').should be_nil
+        expect(Federation.find('Mordor')).to be_nil
       end
     end
 
     context "#find using parts of names" do
       it "should find a federation given a substring which is unique and at least 4 characters" do
         fed = Federation.find('bosni')
-        fed.code.should == 'BIH'
-        fed.name.should == 'Bosnia and Herzegovina'
+        expect(fed.code).to eq('BIH')
+        expect(fed.name).to eq('Bosnia and Herzegovina')
       end
 
       it "should not be fooled by irrelevant whitespace" do
         fed = Federation.find('  arab    EMIRATES   ')
-        fed.code.should == 'UAE'
-        fed.name.should == 'United Arab Emirates'
+        expect(fed.code).to eq('UAE')
+        expect(fed.name).to eq('United Arab Emirates')
       end
 
       it "should not find a federation if the substring matches more than one" do
-        Federation.find('land').should be_nil
+        expect(Federation.find('land')).to be_nil
       end
 
       it "should return nil for any string smaller in length than 3" do
-        Federation.find('ze').should be_nil
+        expect(Federation.find('ze')).to be_nil
       end
     end
 
     context "#find federations with alternative names" do
       it "should find Macedonia multiple ways" do
-        Federation.find('MKD').name.should == 'Macedonia'
-        Federation.find('FYROM').name.should == 'Macedonia'
-        Federation.find('macedoni').name.should == 'Macedonia'
-        Federation.find('Macedonia').name.should == 'Macedonia'
-        Federation.find('former YUG Rep').name.should == 'Macedonia'
-        Federation.find('Republic of Macedonia').name.should == 'Macedonia'
-        Federation.find('former yugoslav republic').name.should == 'Macedonia'
+        expect(Federation.find('MKD').name).to eq('Macedonia')
+        expect(Federation.find('FYROM').name).to eq('Macedonia')
+        expect(Federation.find('macedoni').name).to eq('Macedonia')
+        expect(Federation.find('Macedonia').name).to eq('Macedonia')
+        expect(Federation.find('former YUG Rep').name).to eq('Macedonia')
+        expect(Federation.find('Republic of Macedonia').name).to eq('Macedonia')
+        expect(Federation.find('former yugoslav republic').name).to eq('Macedonia')
       end
     end
 
     context "#find from common code errors" do
       it "should find IRL from ICU" do
-        Federation.find('ICU').code.should == 'IRL'
-        Federation.find('SPA').code.should == 'ESP'
-        Federation.find('WAL').code.should == 'WLS'
+        expect(Federation.find('ICU').code).to eq('IRL')
+        expect(Federation.find('SPA').code).to eq('ESP')
+        expect(Federation.find('WAL').code).to eq('WLS')
       end
     end
 
     context "#find with alternative inputs" do
       it "should behave robustly with completely invalid inputs" do
-        Federation.find().should be_nil
-        Federation.find(nil).should be_nil
-        Federation.find('').should be_nil
-        Federation.find(1).should be_nil
+        expect(Federation.find()).to be_nil
+        expect(Federation.find(nil)).to be_nil
+        expect(Federation.find('')).to be_nil
+        expect(Federation.find(1)).to be_nil
       end
     end
 
     context "#new is private" do
       it "#new cannot be called directly" do
-        lambda { Federation.new('IRL', 'Ireland') }.should raise_error(/private method/)
+        expect { Federation.new('IRL', 'Ireland') }.to raise_error(/private method/)
       end
     end
 
     context "documentation examples" do
       it "should all be correct for valid input" do
-        Federation.find('IRL').name.should == 'Ireland'
-        Federation.find('IRL').code.should == 'IRL'
-        Federation.find('rUs').code.should == 'RUS'
-        Federation.find('ongoli').name.should == 'Mongolia'
-        Federation.find('  united   states   ').code.should == 'USA'
+        expect(Federation.find('IRL').name).to eq('Ireland')
+        expect(Federation.find('IRL').code).to eq('IRL')
+        expect(Federation.find('rUs').code).to eq('RUS')
+        expect(Federation.find('ongoli').name).to eq('Mongolia')
+        expect(Federation.find('  united   states   ').code).to eq('USA')
       end
 
       it "should return nil for invalid input" do
-        Federation.find('ZYX').should be_nil
-        Federation.find('land').should be_nil
+        expect(Federation.find('ZYX')).to be_nil
+        expect(Federation.find('land')).to be_nil
       end
     end
 
     context "#menu" do
       it "should return array of name-code pairs in order of name by default" do
         menu = Federation.menu
-        menu.should have(total).items
+        expect(menu.size).to eq(total)
         names = menu.map{|m| m.first}.join(',')
         codes = menu.map{|m| m.last}.join(',')
-        names.index('Afghanistan').should == 0
-        names.index('Iraq,Ireland,Israel').should_not be_nil
-        codes.index('AFG').should == 0
-        codes.index('IRQ,IRL,ISR').should_not be_nil
+        expect(names.index('Afghanistan')).to eq(0)
+        expect(names.index('Iraq,Ireland,Israel')).not_to be_nil
+        expect(codes.index('AFG')).to eq(0)
+        expect(codes.index('IRQ,IRL,ISR')).not_to be_nil
       end
 
       it "should be configuarble to order the list by codes" do
         menu = Federation.menu(:order => "code")
-        menu.should have(total).items
+        expect(menu.size).to eq(total)
         names = menu.map{|m| m.first}.join(',')
         codes = menu.map{|m| m.last}.join(',')
-        names.index('Afghanistan').should == 0
-        names.index('Ireland,Iraq,Iceland').should_not be_nil
-        codes.index('AFG').should == 0
-        codes.index('IRL,IRQ,ISL').should_not be_nil
+        expect(names.index('Afghanistan')).to eq(0)
+        expect(names.index('Ireland,Iraq,Iceland')).not_to be_nil
+        expect(codes.index('AFG')).to eq(0)
+        expect(codes.index('IRL,IRQ,ISL')).not_to be_nil
       end
 
       it "should be configuarble to have a selected country at the top" do
         menu = Federation.menu(:top => 'IRL')
-        menu.should have(total).items
+        expect(menu.size).to eq(total)
         names = menu.map{|m| m.first}.join(',')
         codes = menu.map{|m| m.last}.join(',')
-        names.index('Ireland,Afghanistan').should == 0
-        names.index('Iraq,Israel').should_not be_nil
-        codes.index('IRL,AFG').should == 0
-        codes.index('IRQ,ISR').should_not be_nil
+        expect(names.index('Ireland,Afghanistan')).to eq(0)
+        expect(names.index('Iraq,Israel')).not_to be_nil
+        expect(codes.index('IRL,AFG')).to eq(0)
+        expect(codes.index('IRQ,ISR')).not_to be_nil
       end
 
       it "should be configuarble to have 'None' entry at the top" do
         menu = Federation.menu(:none => 'None')
-        menu.should have(total + 1).items
+        expect(menu.size).to eq(total + 1)
         names = menu.map{|m| m.first}.join(',')
         codes = menu.map{|m| m.last}.join(',')
-        names.index('None,Afghanistan').should == 0
-        codes.index(',AFG').should == 0
+        expect(names.index('None,Afghanistan')).to eq(0)
+        expect(codes.index(',AFG')).to eq(0)
       end
 
       it "should be able to handle multiple configuarations" do
         menu = Federation.menu(:top => 'IRL', :order => 'code', :none => 'None')
-        menu.should have(total + 1).items
+        expect(menu.size).to eq(total + 1)
         names = menu.map{|m| m.first}.join(',')
         codes = menu.map{|m| m.last}.join(',')
-        names.index('None,Ireland,Afghanistan').should == 0
-        names.index('Iraq,Iceland').should_not be_nil
-        codes.index(',IRL,AFG').should == 0
-        codes.index('IRQ,ISL').should_not be_nil
+        expect(names.index('None,Ireland,Afghanistan')).to eq(0)
+        expect(names.index('Iraq,Iceland')).not_to be_nil
+        expect(codes.index(',IRL,AFG')).to eq(0)
+        expect(codes.index('IRQ,ISL')).not_to be_nil
       end
     end
 
     context "#codes" do
       it "should return array of codes ordered alphabetically" do
         codes = Federation.codes
-        codes.should have(total).items
+        expect(codes.size).to eq(total)
         all = codes.join(',')
-        all.index('AFG').should == 0
-        all.index('INA,IND,IRI,IRL,IRQ,ISL,ISR,ISV,ITA,IVB').should_not be_nil
+        expect(all.index('AFG')).to eq(0)
+        expect(all.index('INA,IND,IRI,IRL,IRQ,ISL,ISR,ISV,ITA,IVB')).not_to be_nil
       end
     end
 

@@ -2,7 +2,7 @@
 
 A place for utilities shared across the various ICU apps and gems.
 
-So far just includes a class to handle FIDE federations.
+Includes a class to handle FIDE federations and one to do date validation.
 
 ## Installation
 
