@@ -59,6 +59,7 @@ module ICU
     private
 
     def to_date(thing)
+      thing = thing.call if thing.respond_to?(:call)
       if thing.is_a?(Date)
         thing.dup
       else
