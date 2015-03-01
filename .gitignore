@@ -2,7 +2,7 @@
 *.rbc
 .bundle
 .config
-doc/
+html
 pkg
 rdoc
 tmp
