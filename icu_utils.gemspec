@@ -5,7 +5,7 @@ require 'icu_utils/version'
 
 Gem::Specification.new do |s|
   s.name             = "icu_utils"
-  s.version          = IcuUtils::VERSION
+  s.version          = ICU::Utils::VERSION
   s.authors          = ["Mark Orr"]
   s.email            = ["mark.j.l.orr@googlemail.com"]
   s.description      = %q{A place for shared utilities for sharing between the various ICU apps and gems}
