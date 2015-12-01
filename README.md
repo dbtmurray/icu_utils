@@ -1,3 +1,8 @@
+# New Home
+
+This repository was forked in late 2015 and is now maintained at
+https://github.com/ninkibah/icu_utils.
+
 # IcuUtils
 
 A place for utilities shared across the various ICU apps and gems.
