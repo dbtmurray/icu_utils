@@ -230,6 +230,7 @@ module ICU
       ['JOR', 'Jordan'],
       ['KAZ', 'Kazakhstan'],
       ['KEN', 'Kenya'],
+      ['KOS', 'Kosovo'],
       ['KUW', 'Kuwait'],
       ['KGZ', 'Kyrgyzstan'],
       ['LAO', 'Laos'],
@@ -325,6 +326,7 @@ module ICU
       ['YEM', 'Yemen'],
       ['ZAM', 'Zambia'],
       ['ZIM', 'Zimbabwe'],
+      ['FID', 'Unregistered'], # Used by FIDE to mark unregistered players
     ]
   end
 end
